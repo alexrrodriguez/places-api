@@ -10,8 +10,12 @@ class PlacesController < ApplicationController
       name: params[:name],
       address: params[:address]
     )
-    place.save
-    render json: place.as_json
+    if place.save
+      render json: place.as_json
+    else
+      render json: {errors: place.errors.full_messages},
+      status: 422
+    end
   end
 
   def show
@@ -23,8 +27,12 @@ class PlacesController < ApplicationController
     place = Place.find_by(id: params[:id])
     place.name = params[:name] || place.name
     place.address = params[:address] || place.address
-    place.save
-    render json: place.as_json
+    if place.save
+      render json: place.as_json
+    else
+      render json: {errors: place.errors.full_messages},
+      status: 422
+    end
   end
 
   def destroy
